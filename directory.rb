@@ -41,7 +41,7 @@ def print_header
 end
 
 def print_directory(students)
-  @students.each_with_index do |student|
+  @students.each do |student|
     nam = student[:name]
     cohort = student[:cohort]
     puts "#{nam} (#{cohort} cohort)"    	
