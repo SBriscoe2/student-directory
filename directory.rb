@@ -2,7 +2,7 @@
 def interactive_menu
   loop do
     menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -49,8 +49,8 @@ def show_students
   print_footer(@students)
 end 
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     nam, cohort = line.chomp.split(',')
     @students << {name: nam, cohort: cohort.to_sym}
@@ -67,7 +67,7 @@ def input_students
   while !nam.empty? do
     @students << {name: nam, cohort: :november}
     puts "Now we have #{@students.count} students"
-    nam = gets.chomp
+    nam = STDIN.gets.chomp
   end
   @students
 end
@@ -88,5 +88,19 @@ end
 def print_footer(names)
 puts "Overall, we have #{names.count} great students"
 end
+
+def try_load_students
+  filename = ARGV.first # first argument from the command line
+  return if filename.nil? # get out of the method if it isn't given
+
+  if File.exists?(filename) # if it exists
+  	load_students(filename)
+  	puts "Loaded #{@students.count} from #{filename}"
+  else # if it doesn't exist
+  	puts "Sorry, #{filename} doesn't exist."
+  	exit # quit the program
+  end
+end
 #nothing happens until we call the methods
+try_load_students
 interactive_menu
